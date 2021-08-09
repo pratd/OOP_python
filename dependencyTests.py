@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from dependencyInjection import AuthorizerSMS, Order, PaymentProcessor
+from dependencyInjection import AuthorizerSMS, AuthorizerRobot, Order, PaymentProcessor
 
 
 class OrderTestCase(unittest.TestCase):
@@ -39,6 +39,31 @@ class AuthorizerSMSTestCase(unittest.TestCase):
         auth.generate_sms_code()
         auth.authorize()
         self.assertFalse(auth.is_authorized())
+
+
+class AuthorizerRobotTestCase(unittest.TestCase):
+
+    def test_init_authorizer(self):
+        auth = AuthorizerRobot()
+        self.assertFalse(auth.is_authorized())
+
+    def test_authorize_success(self):
+        auth = AuthorizerRobot()
+        with patch('builtins.input', return_value="n"):
+            auth.authorize()
+            self.assertTrue(auth.is_authorized())
+
+    def test_authorize_success_uppercase(self):
+        auth = AuthorizerRobot()
+        with patch('builtins.input', return_value="N"):
+            auth.authorize()
+            self.assertTrue(auth.is_authorized())
+
+    def test_authorize_fail(self):
+        auth = AuthorizerRobot()
+        with patch('builtins.input', return_value="y"):
+            auth.authorize()
+            self.assertFalse(auth.is_authorized())
 
 
 class PaymentProcessorTestCase(unittest.TestCase):

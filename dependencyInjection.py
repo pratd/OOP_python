@@ -7,11 +7,11 @@ class Authorizer(ABC):
 
     @abstractmethod
     def authorize(self):
-        pass
+        '''Authorizes the user'''
 
     @abstractmethod
     def is_authorized(self) -> bool:
-        pass
+        '''Authorize check'''
 
 
 class Order:
@@ -36,6 +36,20 @@ class AuthorizerSMS(Authorizer):
     def authorize(self):
         code = input('Enter a SMS code:')
         self.authorized = code == self.code
+
+    def is_authorized(self) -> bool:
+        return self.authorized
+
+
+class AuthorizerRobot(Authorizer):
+    def __init__(self):
+        self.authorized = False
+
+    def authorize(self):
+        robot = ""
+        while robot != "y" and robot != "n":
+            robot = input("are you a robot (y/n) ? ").lower()
+        self.authorized = robot == "n"
 
     def is_authorized(self) -> bool:
         return self.authorized
