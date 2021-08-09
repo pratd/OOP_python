@@ -16,13 +16,13 @@ class Person:
     def __str__(self):
         return f'{self.name}, {self.job} ({self.age})'
 
-person1 = Person("abc", "witcher", 30, 99)
-person2 = Person("def", "xyz", 26)
-person3 = Person("def", "xyz", 26)
 
+if __name__ == "__main__":
+    person1 = Person("abc", "witcher", 30, 99)
+    person2 = Person("def", "xyz", 26)
+    person3 = Person("def", "xyz", 26)
 
-print(id(person2))
-print(id(person3))
-print(person1)
-
-print(person1 > person2)
+    print(id(person2))
+    print(id(person3))
+    print(person1)
+    print(person1 > person2)
