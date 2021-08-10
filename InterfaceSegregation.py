@@ -21,23 +21,40 @@ class Order:
         return total
 
 
+class SMSAuth:
+    authorized = False
+
+    def verify_code(self, code):
+        print(f"Verifying code {code}")
+        self.authorized = True
+
+    def is_authorized(self) -> bool:
+        return self.authorized
+
+
 class PaymentProcessor(ABC):
+
     @abstractmethod
     def pay(self, order):
         pass
 
 
 class DebitPaymentProcessor(PaymentProcessor):
-    def __init__(self, security_code):
+
+    def __init__(self, security_code, authorizer: SMSAuth):
+        self.authorizer = authorizer
         self.security_code = security_code
 
     def pay(self, order):
+        if not self.authorizer.is_authorized():
+            raise Exception("Not authorized")
         print("Processing debit payment type")
         print(f"Verifying security code: {self.security_code}")
         order.status = "paid"
 
 
 class CreditPaymentProcessor(PaymentProcessor):
+
     def __init__(self, security_code):
         self.security_code = security_code
 
@@ -48,12 +65,16 @@ class CreditPaymentProcessor(PaymentProcessor):
 
 
 class PaypalPaymentProcessor(PaymentProcessor):
-    def __init__(self, email_address):
+
+    def __init__(self, email_address, authorizer: SMSAuth):
+        self.authorizer = authorizer
         self.email_address = email_address
 
     def pay(self, order):
+        if not self.authorizer.is_authorized():
+            raise Exception("Not authorized")
         print("Processing paypal payment type")
-        print(f"Verifying security code: {self.email_address}")
+        print(f"Using email address: {self.email_address}")
         order.status = "paid"
 
 
@@ -64,5 +85,7 @@ if __name__ == "__main__":
     order.add_item("USB cable", 2, 5)
 
     print(order.total_price())
-    processor = PaypalPaymentProcessor("abc@gmail.com")
+    authorizer = SMSAuth()
+    processor = DebitPaymentProcessor("2349875", authorizer)
+    authorizer.verify_code(465839)
     processor.pay(order)
