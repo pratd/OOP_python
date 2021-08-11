@@ -1,0 +1,8 @@
+2021-08-11 11:41:14,501 - exc_logger - ERROR - exception in divideByZero
+=============
+Traceback (most recent call last):
+  File "D:\PythonProjects\logging-decorator.py", line 37, in wrapper
+    return func(*args, **kwargs)
+  File "D:\PythonProjects\logging-decorator.py", line 51, in divideByZero
+    return 12 / 0
+ZeroDivisionError: division by zero
