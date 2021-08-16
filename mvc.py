@@ -1,13 +1,32 @@
 import tkinter as tk
 import uuid
+from abc import ABC, abstractmethod
 
 
 class Model:
     uuid = []
 
 
+class View(ABC):
+    @abstractmethod
+    def setup(self, controller):
+        pass
+
+    @abstractmethod
+    def append_to_list(self, item):
+        pass
+
+    @abstractmethod
+    def clear_list(self):
+        pass
+
+    @abstractmethod
+    def start_main_loop(self):
+        pass
+
+
 class Controller:
-    def __init__(self, model, view):
+    def __init__(self, model: Model, view: View):
         self.model = model
         self.view = view
 
@@ -26,7 +45,7 @@ class Controller:
         self.view.clear_list()
 
 
-class TKView:
+class TKView(View):
     def setup(self, controller):
         # setup tkinter
         self.root = tk.Tk()

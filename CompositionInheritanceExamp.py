@@ -44,6 +44,7 @@ class Employee:
         return payout
 
 
+
 @dataclass
 class HourlyContract(Contract):
     """Contract type for an employee that's paid based on the number of worked hours"""
